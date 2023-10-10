@@ -2,9 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [ beta ]
   pull_request:
-    branches: [ beta ]
   workflow_dispatch:
 
 jobs:
@@ -13,10 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: set up JDK
-      uses: actions/setup-java@v1
-      with:
-        java-version: 17
-    - name: Build with Gradle
-      run: ./gradlew build
+      - uses: actions/checkout@v2
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Build with Gradle
+        run: ./gradlew build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: AFWall-${{ github.ref_name }}
+          path: app/build/outputs/apk/release/*.apk
